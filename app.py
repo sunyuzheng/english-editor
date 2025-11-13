@@ -227,13 +227,18 @@ async def read_root():
                     });
                     
                     if (!response.ok) {
-                        throw new Error('Failed to edit text');
+                        const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                        throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
                     }
                     
                     const data = await response.json();
+                    if (!data.edited_text) {
+                        throw new Error('No edited text returned from server');
+                    }
                     output.value = data.edited_text;
                 } catch (error) {
-                    output.value = 'Error: ' + error.message;
+                    output.value = 'Error: ' + (error.message || 'Failed to edit text. Please try again.');
+                    console.error('Edit error:', error);
                 } finally {
                     editBtn.disabled = false;
                     loading.classList.remove('show');
@@ -270,11 +275,26 @@ async def edit_text(request: EditRequest):
             max_tokens=2048
         )
         
+        if not response.choices or len(response.choices) == 0:
+            raise ValueError("No response from API")
+        
         edited_text = response.choices[0].message.content.strip()
         
+        if not edited_text:
+            raise ValueError("Empty response from API")
+        
         return {"edited_text": edited_text}
+    except ValueError as e:
+        # Handle specific value errors
+        raise HTTPException(status_code=500, detail=f"API Error: {str(e)}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Provide more detailed error information
+        error_msg = str(e)
+        error_type = type(e).__name__
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error ({error_type}): {error_msg}. Please check if AI_BUILDER_TOKEN is set correctly."
+        )
 
 if __name__ == "__main__":
     import uvicorn
