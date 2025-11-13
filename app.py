@@ -28,6 +28,16 @@ SYSTEM_PROMPT = """Your role is to be an English guru, an expert in authentic Am
 class EditRequest(BaseModel):
     text: str
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    token_set = bool(os.getenv("AI_BUILDER_TOKEN"))
+    return {
+        "status": "healthy",
+        "token_configured": token_set,
+        "message": "Token is configured" if token_set else "Warning: AI_BUILDER_TOKEN not set"
+    }
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     return """
