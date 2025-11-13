@@ -35,7 +35,9 @@ async def health_check():
     return {
         "status": "healthy",
         "token_configured": token_set,
-        "message": "Token is configured" if token_set else "Warning: AI_BUILDER_TOKEN not set"
+        "message": "Token is configured" if token_set else "Warning: AI_BUILDER_TOKEN not set",
+        "version": "1.0.1",
+        "last_updated": "2025-11-13T17:50:00"
     }
 
 @app.get("/", response_class=HTMLResponse)
