@@ -59,6 +59,23 @@ def deploy():
             print()
             if data.get('message'):
                 print("Message:", data.get('message'))
+        elif response.status_code == 200:
+            # Sometimes the API returns 200 with deployment list
+            data = response.json()
+            if 'deployments' in data and len(data['deployments']) > 0:
+                deployment = data['deployments'][0]
+                print("✅ Deployment already exists and is active!")
+                print()
+                print(f"Service Name: {deployment.get('service_name')}")
+                print(f"Status: {deployment.get('status')}")
+                print(f"Public URL: {deployment.get('public_url', 'Not available')}")
+                print(f"Last Deployed: {deployment.get('last_deployed_at', 'Unknown')}")
+                print()
+                if deployment.get('message'):
+                    print("Message:", deployment.get('message'))
+            else:
+                print(f"⚠️ Unexpected response format (status {response.status_code})")
+                print("Response:", response.text[:500])
         else:
             print(f"❌ Deployment failed with status {response.status_code}")
             print("Response:", response.text)
