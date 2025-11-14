@@ -18,7 +18,7 @@ def get_client():
     if not api_token:
         raise ValueError("AI_BUILDER_TOKEN environment variable is not set. Please set it in your .env file or as an environment variable.")
     return OpenAI(
-        base_url="https://space.ai-builders.com/resources/students-backend/v1",
+        base_url="https://space.ai-builders.com/backend/v1",
         api_key=api_token
     )
 
