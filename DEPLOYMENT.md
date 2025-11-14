@@ -40,7 +40,7 @@ python deploy.py
 
 你可以通过以下方式检查部署状态:
 
-- 访问部署 API: `https://www.ai-builders.com/resources/students-backend/v1/deployments/english-editor`
+- 访问部署 API: `https://space.ai-builders.com/resources/students-backend/v1/deployments/english-editor`
 - 或使用部署脚本检查状态（可以扩展 deploy.py 添加状态检查功能）
 
 ## 部署信息

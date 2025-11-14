@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_BASE_URL = "https://www.ai-builders.com/resources/students-backend"
+API_BASE_URL = "https://space.ai-builders.com/resources/students-backend"
 API_TOKEN = os.getenv("AI_BUILDER_TOKEN")
 
 if not API_TOKEN:
